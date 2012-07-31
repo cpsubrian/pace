@@ -3,6 +3,12 @@ Pace
 
 A node.js module that outputs a progress bar and other metrics to the command-line.
 
+Installation
+------------
+```
+$ npm install pace
+```
+
 Example
 -------
 Running the following code:
@@ -22,4 +28,4 @@ while (count++ < total) {
 ```
 
 Will cause output to your console similar to:
-![Sample progress bar output](screenshot.png)
+![Sample progress bar output](https://github.com/cantina/pace/raw/master/screenshot.png)
