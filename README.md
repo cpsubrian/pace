@@ -28,4 +28,5 @@ while (count++ < total) {
 ```
 
 Will cause output to your console similar to:
+
 ![Sample progress bar output](https://github.com/cantina/pace/raw/master/screenshot.png)
