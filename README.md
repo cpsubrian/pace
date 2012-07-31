@@ -61,10 +61,12 @@ Supported Options:
   * `showBurden` - Mostly for debugging.  Show the current burden / skipped steps with the other metrics.
 
 ### pace.op([count]) ###
-To signal to pace that an operation was completed in your script, simple call
-`pace.op()`.  If you would rather track the progress in your own logic than let
-pace do it for you, you can call `pace.op(<count>)` where `<count>` is the
-current operation interation count (for example step # `50`).
+Signal to pace that an operation was completed in your script by calling
+`pace.op()`.
+
+If you would rather track the progress in your own logic, you can call
+`pace.op(<count>)` where `<count>` is the current operation interation
+(for example step # 50 of a 100 step process).
 
 ### pace.total ###
 If your script has a dynamic amount of work to do (for example, depending on the
