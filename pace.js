@@ -1,7 +1,7 @@
 /**
  * Pace
  *
- * A portable progress bar for the command-line.
+ * A progress bar for the command-line.
  *
  * Example usage:
  *
@@ -17,10 +17,6 @@
  *         count = count;
  *       }
  *     }
- *
- * @license MIT
- * @author Brian Link, Carlos Rodriguez
- * @copyright 2012 Terra Eclipse, Inc.
  */
 
 // Module dependencies.
@@ -60,12 +56,11 @@ function Pace(options) {
   this.time_burden = 0;
   this.skip_steps = 0;
   this.skipped = 0;
+  this.aborted = false;
 
   // Setup charm.
   this.charm = charm();
   this.charm.pipe(process.stdout);
-  this.charm.cursor(false);
-  this.charm.on('^C', this.abort.bind(this));
 
   // Prepare the output.
   this.charm.write("\n\n\n");
@@ -87,8 +82,6 @@ module.exports = function(options) {
  * An operation has been emitted.
  */
 Pace.prototype.op = function op(count) {
-  var hours, min, sec;
-
   if (count) {
     this.current = count;
   }
@@ -100,13 +93,34 @@ Pace.prototype.op = function op(count) {
     return;
   }
 
-  // Perform the main progress bar logic.
+  // Record the start time of the whole task.
   if (!this.started) {
     this.started = new Date().getTime();
   }
 
-  // Start collecting time.
+  // Record start time.
   this.time_start = new Date().getTime();
+
+  this.updateTimes();
+  this.clear();
+  this.outputProgress();
+  this.outputStats();
+  this.outputTimes();
+
+  // The task is complete.
+  if (this.current >= this.total) {
+    this.finished();
+  }
+
+  // Record end time.
+  this.time_end = new Date().getTime();
+  this.inner_time = this.time_end - this.time_start;
+};
+
+/**
+ * Update times.
+ */
+Pace.prototype.updateTimes = function updateTimes() {
   this.elapsed = this.time_start - this.started;
   if (this.time_end > 0) {
     this.outer_time = this.time_start - this.time_end;
@@ -124,11 +138,19 @@ Pace.prototype.op = function op(count) {
   if (this.time_burden > this.max_burden && (this.skip_steps < (this.total / this.size))) {
     this.skip_steps = Math.floor(++this.skip_steps * 1.3);
   }
+};
 
-  // Reset charm cursor position.
+/**
+ * Move the cursor back to the beginning and clear old output.
+ */
+Pace.prototype.clear = function clear() {
   this.charm.erase('line').up(1).erase('line').up(1).erase('line').write("\r");
+};
 
-  // Write the progress bar.
+/**
+ * Output the progress bar.
+ */
+Pace.prototype.outputProgress = function outputProgress() {
   this.charm.write('Processing: ');
   this.charm.foreground('green').background('green');
   for (var i = 0; i < ((this.current / this.total) * this.size) - 1 ; i++) {
@@ -140,8 +162,12 @@ Pace.prototype.op = function op(count) {
     i++;
   }
   this.charm.display('reset').down(1).left(100);
+};
 
-  // Output numerical stats.
+/**
+ * Output numerical progress stats.
+ */
+Pace.prototype.outputStats = function outputStats() {
   this.perc = (this.current/this.total)*100;
   this.perc = padLeft(this.perc.toFixed(2), 2);
   this.charm.write('            ').display('bright').write(this.perc + '%').display('reset');
@@ -156,11 +182,17 @@ Pace.prototype.op = function op(count) {
   }
 
   this.charm.display('reset').down(1).left(100);
+};
 
+/**
+ * Output times.
+ */
+Pace.prototype.outputTimes = function outputTimes() {
   // Output times.
-  hours = Math.floor(this.elapsed / (1000 * 60 * 60));
-  min = Math.floor(((this.elapsed / 1000) % (60 * 60)) / 60);
-  sec = Math.floor((this.elapsed / 1000) % 60);
+  var hours = Math.floor(this.elapsed / (1000 * 60 * 60));
+  var min = Math.floor(((this.elapsed / 1000) % (60 * 60)) / 60);
+  var sec = Math.floor((this.elapsed / 1000) % 60);
+
   this.charm.write('            ').display('bright').write('Elapsed: ').display('reset');
   this.charm.write(hours + 'h ' + min + 'm ' + sec + 's');
 
@@ -168,18 +200,10 @@ Pace.prototype.op = function op(count) {
     hours = Math.floor(this.time_left / (1000 * 60 * 60));
     min = Math.floor(((this.time_left / 1000) % (60 * 60)) / 60);
     sec = Math.ceil((this.time_left / 1000) % 60);
+
     this.charm.write('   ').display('bright').write('Remaining: ').display('reset');
     this.charm.write(hours + 'h ' + min + 'm ' + sec + 's');
   }
-
-  // The task is complete.
-  if (this.current >= this.total) {
-    this.finished();
-  }
-
-  // Record end time.
-  this.time_end = new Date().getTime();
-  this.inner_time = this.time_end - this.time_start;
 };
 
 /**
@@ -189,19 +213,6 @@ Pace.prototype.finished = function finished() {
   this.charm.write("\n\n");
   this.charm.write('Finished!');
   this.charm.write("\n\n");
-  this.charm.cursor(true);
-  this.charm.end();
-};
-
-/**
- * The process was aborted.
- */
-Pace.prototype.abort = function abort() {
-  this.charm.write("\n\n");
-  this.charm.write('Aborted!');
-  this.charm.write("\n\n");
-  this.charm.cursor(true);
-  this.charm.end();
 };
 
 /**
