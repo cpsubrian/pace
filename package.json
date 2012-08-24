@@ -2,7 +2,7 @@
   "author": "Brian Link <cpsubrian@gmail.com>",
   "name": "pace",
   "description": "Command-line progress bar and progress metrics.  Helps you measure the 'pace' of a long-running script.",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "homepage": "http://cantina.github.com",
   "repository": {
     "type": "git",
