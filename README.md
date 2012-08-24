@@ -17,7 +17,7 @@ Example
 -------
 Running the following code:
 
-```
+```js
 var total = 50000,
     count = 0,
     pace = require('../')(total);
@@ -47,7 +47,7 @@ So `require('pace')(<options>)` creates an instance of `Pace`, passing
 Options can either be an object literal, or an integer.  If its an integer then
 it is the same as passing options with only the `total` specified.
 
-```
+```js
 require('pace')(100);
 
 // Same as
