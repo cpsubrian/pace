@@ -16,6 +16,7 @@ $ npm install pace
 Example
 -------
 Running the following code:
+
 ```
 var total = 50000,
     count = 0,
