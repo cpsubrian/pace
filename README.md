@@ -20,7 +20,7 @@ Running the following code:
 ```js
 var total = 50000,
     count = 0,
-    pace = require('../')(total);
+    pace = require('pace')(total);
 
 while (count++ < total) {
   pace.op();
