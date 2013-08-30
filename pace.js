@@ -44,7 +44,7 @@ function Pace(options) {
   // Whether to show current burden %.
   this.show_burden = options.showBurden || false;
   
-  // Type of item, e.g. 'widgets'
+  // Type of item, e.g. 'widgets'.
   this.itemType = options.itemType || '';
 
   // Internal time tracking properties.
