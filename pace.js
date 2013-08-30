@@ -43,6 +43,9 @@ function Pace(options) {
 
   // Whether to show current burden %.
   this.show_burden = options.showBurden || false;
+  
+  // Type of item, e.g. 'widgets'.
+  this.itemType = options.itemType || '';
 
   // Internal time tracking properties.
   this.started = false;
@@ -173,7 +176,7 @@ Pace.prototype.outputStats = function outputStats() {
   this.charm.write('            ').display('bright').write(this.perc + '%').display('reset');
   this.total_len = formatNumber(this.total).length;
   this.charm.write('   ').display('bright').write(padLeft(formatNumber(this.current), this.total_len)).display('reset');
-  this.charm.write('/' + formatNumber(this.total));
+  this.charm.write('/' + formatNumber(this.total) + ' ' + this.itemType);
 
   // Output burden.
   if (this.show_burden) {
