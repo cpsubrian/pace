@@ -4,12 +4,19 @@
  * Set the current position in op() and also randomly increase the total.
  */
 
-var total = 50000,
+var total = 100,
     current = 0,
-    pace = require('../')(total);
+    pace = require('../')({
+      total : total,
+      texts : {
+        info : "Downloading: ",
+        unit : " bytes",
+        finished : "Woohoo!"
+      }
+    });
 
-while (current++ < total) {
-  if (Math.random() > 0.9) {
+while (current++ <= total) {
+  if (Math.random() > 0.9 || current === total) {
     pace.op(current);
   }
 
@@ -19,7 +26,7 @@ while (current++ < total) {
   }
 
   // Cause some work to be done.
-  for (var i = 0; i < 1000000; i++) {
+  for (var i = 0; i < 100000; i++) {
     current = current;
   }
 }

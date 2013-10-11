@@ -34,6 +34,25 @@ function Pace(options) {
   }
   this.total = options.total;
 
+  // Update texts if needed
+  this.texts = {
+    info : "Processing: ",
+    unit : "",
+    elapsed : "Elapsed: ",
+    burden : "Burden: ",
+    remaining : "Remaining: ",
+    finished : "Finished!\n\n"
+  };
+  if (!!options.texts) {
+    for (var key in options.texts) {
+      if (options.texts.hasOwnProperty(key)) {
+        this.texts[key] = options.texts[key];
+      }
+    }
+  }
+
+  this.indent = this.texts.info.length;
+
   // Current item number.
   this.current = 0;
 
@@ -57,13 +76,14 @@ function Pace(options) {
   this.skip_steps = 0;
   this.skipped = 0;
   this.aborted = false;
+  this.finished = false;
 
   // Setup charm.
   this.charm = charm();
   this.charm.pipe(process.stdout);
 
   // Prepare the output.
-  this.charm.write("\n\n\n");
+  this.charm.write("\n\n");
 }
 
 /**
@@ -81,7 +101,7 @@ module.exports = function(options) {
 /**
  * An operation has been emitted.
  */
-Pace.prototype.op = function op(count) {
+Pace.prototype.op = function (count) {
   if (count) {
     this.current = count;
   }
@@ -89,7 +109,7 @@ Pace.prototype.op = function op(count) {
     this.current++;
   }
 
-  if (this.burdenReached()) {
+  if (this.burdenReached() && this.current < this.total || this.finished) {
     return;
   }
 
@@ -109,7 +129,7 @@ Pace.prototype.op = function op(count) {
 
   // The task is complete.
   if (this.current >= this.total) {
-    this.finished();
+    this.finish();
   }
 
   // Record end time.
@@ -120,7 +140,7 @@ Pace.prototype.op = function op(count) {
 /**
  * Update times.
  */
-Pace.prototype.updateTimes = function updateTimes() {
+Pace.prototype.updateTimes = function () {
   this.elapsed = this.time_start - this.started;
   if (this.time_end > 0) {
     this.outer_time = this.time_start - this.time_end;
@@ -143,15 +163,15 @@ Pace.prototype.updateTimes = function updateTimes() {
 /**
  * Move the cursor back to the beginning and clear old output.
  */
-Pace.prototype.clear = function clear() {
-  this.charm.erase('line').up(1).erase('line').up(1).erase('line').write("\r");
+Pace.prototype.clear = function () {
+  this.charm.erase('line').up(1).erase('line').up(1).erase('line').left(100);
 };
 
 /**
  * Output the progress bar.
  */
-Pace.prototype.outputProgress = function outputProgress() {
-  this.charm.write('Processing: ');
+Pace.prototype.outputProgress = function () {
+  this.charm.write(this.texts.info);
   this.charm.foreground('green').background('green');
   for (var i = 0; i < ((this.current / this.total) * this.size) - 1 ; i++) {
      this.charm.write(' ');
@@ -167,17 +187,17 @@ Pace.prototype.outputProgress = function outputProgress() {
 /**
  * Output numerical progress stats.
  */
-Pace.prototype.outputStats = function outputStats() {
+Pace.prototype.outputStats = function () {
   this.perc = (this.current/this.total)*100;
   this.perc = padLeft(this.perc.toFixed(2), 2);
-  this.charm.write('            ').display('bright').write(this.perc + '%').display('reset');
+  this.charm.write(spaces(this.indent)).display('bright').write(this.perc + '%').display('reset');
   this.total_len = formatNumber(this.total).length;
   this.charm.write('   ').display('bright').write(padLeft(formatNumber(this.current), this.total_len)).display('reset');
-  this.charm.write('/' + formatNumber(this.total));
+  this.charm.write('/' + formatNumber(this.total) + this.texts.unit);
 
   // Output burden.
   if (this.show_burden) {
-    this.charm.write('    ').display('bright').write('Burden: ').display('reset');
+    this.charm.write('    ').display('bright').write(this.texts.burden).display('reset');
     this.charm.write(this.time_burden.toFixed(2) + '% / ' + this.skip_steps);
   }
 
@@ -187,13 +207,13 @@ Pace.prototype.outputStats = function outputStats() {
 /**
  * Output times.
  */
-Pace.prototype.outputTimes = function outputTimes() {
+Pace.prototype.outputTimes = function () {
   // Output times.
   var hours = Math.floor(this.elapsed / (1000 * 60 * 60));
   var min = Math.floor(((this.elapsed / 1000) % (60 * 60)) / 60);
   var sec = Math.floor((this.elapsed / 1000) % 60);
 
-  this.charm.write('            ').display('bright').write('Elapsed: ').display('reset');
+  this.charm.write(spaces(this.indent)).display('bright').write(this.texts.elapsed).display('reset');
   this.charm.write(hours + 'h ' + min + 'm ' + sec + 's');
 
   if (this.time_left){
@@ -201,24 +221,23 @@ Pace.prototype.outputTimes = function outputTimes() {
     min = Math.floor(((this.time_left / 1000) % (60 * 60)) / 60);
     sec = Math.ceil((this.time_left / 1000) % 60);
 
-    this.charm.write('   ').display('bright').write('Remaining: ').display('reset');
+    this.charm.write('   ').display('bright').write(this.texts.remaining).display('reset');
     this.charm.write(hours + 'h ' + min + 'm ' + sec + 's');
   }
 };
 
 /**
- * The progress has finished.
+ * The progress has finish.
  */
-Pace.prototype.finished = function finished() {
-  this.charm.write("\n\n");
-  this.charm.write('Finished!');
-  this.charm.write("\n\n");
+Pace.prototype.finish = function () {
+  this.finished = true;
+  this.charm.write('\n').left(100).write(this.texts.finished);
 };
 
 /**
  * Check if the burden threshold has been reached.
  */
-Pace.prototype.burdenReached = function burdenReached() {
+Pace.prototype.burdenReached = function () {
   // Skip this cycle if the burden has determined we should.
   if ((this.skip_steps > 0) && (this.current < this.total)) {
     if (this.skipped < this.skip_steps) {
@@ -243,6 +262,11 @@ function padLeft(str, length, pad) {
   while (str.length < length)
     str = pad + str;
   return str;
+}
+
+// just the spaces
+function spaces(length) {
+  return padLeft('', length, ' ');
 }
 
 // Ported from php.js. Same has php's number_format().
