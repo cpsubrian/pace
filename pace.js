@@ -63,7 +63,7 @@ function Pace(options) {
   this.charm.pipe(process.stdout);
 
   // Prepare the output.
-  this.charm.write("\n\n\n");
+  this.charm.write("\n");
 }
 
 /**
@@ -210,9 +210,7 @@ Pace.prototype.outputTimes = function outputTimes() {
  * The progress has finished.
  */
 Pace.prototype.finished = function finished() {
-  this.charm.write("\n\n");
-  this.charm.write('Finished!');
-  this.charm.write("\n\n");
+  this.charm.write("\n");
 };
 
 /**
