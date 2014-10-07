@@ -60,6 +60,8 @@ Supported Options:
   * `total` - The total number of operations that _YOUR_ script will execute.
   * `maxBurden` - The maximum 'burden' that the progress bar should incur. See more about burden below.
   * `showBurden` - Mostly for debugging.  Show the current burden / skipped steps with the other metrics.
+  * `hideFinishMessage` - Hides the message displayed when the progress bar finishes. Default: `False`
+  * `finishMessage` - Pass a custom message to display when the progress bar finishes. Default: `Finished!`
 
 ### pace.op([count]) ###
 Signal to pace that an operation was completed in your script by calling

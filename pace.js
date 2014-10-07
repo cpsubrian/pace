@@ -32,8 +32,9 @@ function Pace(options) {
   if (!options.total) {
     throw new Error('You MUST specify the total number of operations that will be processed.');
   }
-  this.total = options.total;
-
+  this.total             = options.total;
+  this.hideFinishMessage = options.hideFinishMessage || false;
+  this.finishMessage     = options.finishMessage || "Finished!";
   // Current item number.
   this.current = 0;
 
@@ -45,21 +46,20 @@ function Pace(options) {
   this.show_burden = options.showBurden || false;
 
   // Internal time tracking properties.
-  this.started = false;
-  this.size = 50;
-  this.inner_time = 0;
-  this.outer_time = 0;
-  this.elapsed = 0;
-  this.time_start = 0;
-  this.time_end = 0;
-  this.time_left = 0;
+  this.started     = false;
+  this.size        = 50;
+  this.inner_time  = 0;
+  this.outer_time  = 0;
+  this.elapsed     = 0;
+  this.time_start  = 0;
+  this.time_end    = 0;
+  this.time_left   = 0;
   this.time_burden = 0;
-  this.skip_steps = 0;
-  this.skipped = 0;
-  this.aborted = false;
-
+  this.skip_steps  = 0;
+  this.skipped     = 0;
+  this.aborted     = false;
   // Setup charm.
-  this.charm = charm();
+  this.charm       = charm();
   this.charm.pipe(process.stdout);
 
   // Prepare the output.
@@ -211,8 +211,10 @@ Pace.prototype.outputTimes = function outputTimes() {
  */
 Pace.prototype.finished = function finished() {
   this.charm.write("\n\n");
-  this.charm.write('Finished!');
-  this.charm.write("\n\n");
+  if (!this.hideFinishMessage) {
+    this.charm.write(this.finishMessage);
+    this.charm.write("\n\n");
+  }
 };
 
 /**
