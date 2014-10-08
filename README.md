@@ -120,7 +120,7 @@ This effect is additive for each time `pace` is required with the same stream.
 - - -
 
 ### License: MIT
-Copyright (C) 2014 Terra Eclipse, Inc. ([Ahmad Assaf](http://ahmadassaf.com))
+Copyright (C) 2014 [Ahmad Assaf](http://ahmadassaf.com)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
