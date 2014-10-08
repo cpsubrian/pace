@@ -1,12 +1,15 @@
 {
-  "author": "Brian Link <cpsubrian@gmail.com>",
-  "name": "pace",
-  "description": "Command-line progress bar and progress metrics.  Helps you measure the 'pace' of a long-running script.",
-  "version": "0.0.4",
-  "homepage": "http://cantina.github.com",
+  "author": {
+    "name" : "Ahmad Assaf",
+    "email":  "ahmad.a.assaf@gmail.com"
+  },
+  "name": "awesome-progress",
+  "description": "Command-line progress bar and progress metrics.  Helps you measure the 'pace' and erros during long-running scripts.Forked from https://github.com/cpsubrian/pace",
+  "version": "0.0.52",
+  "homepage": "http://ahmadassaf.com",
   "repository": {
     "type": "git",
-    "url": "git://github.com/cpsubrian/pace.git"
+    "url": "git://github.com/ahmadassaf/Awesome-Porgress.git"
   },
   "main": "pace.js",
   "scripts": {},
