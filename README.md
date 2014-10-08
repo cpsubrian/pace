@@ -95,6 +95,18 @@ Examples
 The `test/` folder contains some simple test scripts you can run to see the
 progress bar in action.
 
+Common Issues
+--------
+#### Multiple writes and wrong progress bar rendering ####
+If you have multiple instances of `pace` running in various parts of your application, from the second run onwards you might notice that the progress bar is not rendered correctly with duplicate output. 
+This effect is additive for each time `pace` is required with the same stream.
+
+**Cause:** The problem is with `pace` dependency `charm`. In node.js 0.10 the EventEmitter constructor explicitly initializes `this._events`, so going `Charm.prototype = new Stream;` causes all Charm instances to share the same _events property. 
+
+**Fix:** Change the `charm` main module file `index.js` and replace `Charm.prototype = new Stream;` with `Charm.prototype = Stream.prototype;`
+
+**References:** 
+  * [substack/node-charm/#18](https://github.com/substack/node-charm/pull/18)
 
 - - -
 

@@ -11,7 +11,7 @@
   "main": "pace.js",
   "scripts": {},
   "dependencies": {
-    "charm": "~0.1.0"
+    "charm": "1.0.0"
   },
   "devDependencies": {},
   "optionalDependencies": {},
