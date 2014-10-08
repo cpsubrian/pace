@@ -169,10 +169,10 @@ Pace.prototype.outputProgress = function outputProgress() {
  * Output numerical progress stats.
  */
 Pace.prototype.outputStats = function outputStats() {
-  this.perc = (this.current/this.total)*100;
-  this.perc = padLeft(this.perc.toFixed(2), 2);
+  this.perc       = (this.current/this.total)*100;
+  this.perc       = padLeft(this.perc.toFixed(2), 2);
   this.charm.write('            ').display('bright').write(this.perc + '%').display('reset');
-  this.total_len = formatNumber(this.total).length;
+  this.total_len  = formatNumber(this.total).length;
   this.charm.write('   ').display('bright').write(padLeft(formatNumber(this.current), this.total_len)).display('reset');
   this.charm.write('/' + formatNumber(this.total));
 
@@ -191,8 +191,8 @@ Pace.prototype.outputStats = function outputStats() {
 Pace.prototype.outputTimes = function outputTimes() {
   // Output times.
   var hours = Math.floor(this.elapsed / (1000 * 60 * 60));
-  var min = Math.floor(((this.elapsed / 1000) % (60 * 60)) / 60);
-  var sec = Math.floor((this.elapsed / 1000) % 60);
+  var min   = Math.floor(((this.elapsed / 1000) % (60 * 60)) / 60);
+  var sec   = Math.floor((this.elapsed / 1000) % 60);
 
   this.charm.write('            ').display('bright').write('Elapsed: ').display('reset');
   this.charm.write(hours + 'h ' + min + 'm ' + sec + 's');
@@ -219,8 +219,7 @@ Pace.prototype.finished = function finished() {
   if (!this.hideFinishMessage) {
     this.charm.write('\n' + this.finishMessage + '\n');
     if (this.errors && this.errorMessage) this.charm.foreground('red').write('\n' + this.errorMessage + '\n');
-    this.charm.write("\n\n");
-  }
+  } else this.charm.write("\n\n");
 };
 
 /**

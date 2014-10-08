@@ -3,9 +3,9 @@
     "name" : "Ahmad Assaf",
     "email":  "ahmad.a.assaf@gmail.com"
   },
-  "name": "Awesome-Pace",
-  "description": "Command-line progress bar and progress metrics.  Helps you measure the 'pace' of a long-running script. Forked from https://github.com/cpsubrian/pace",
-  "version": "0.0.5",
+  "name": "awesome-progress",
+  "description": "Command-line progress bar and progress metrics.  Helps you measure the 'pace' and erros during long-running scripts.Forked from https://github.com/cpsubrian/pace",
+  "version": "0.0.51",
   "homepage": "http://ahmadassaf.com",
   "repository": {
     "type": "git",
