@@ -35,8 +35,10 @@ function Pace(options) {
   this.total             = options.total;
   this.hideFinishMessage = options.hideFinishMessage || false;
   this.finishMessage     = options.finishMessage || "Finished!";
+  this.errorMessage      = options.errorMessage;
   // Current item number.
   this.current = 0;
+  this.errors  = 0;
 
   // Maximum percent of total time the progressbar is allowed to take during processing.
   // Defaults to 0.5%
@@ -82,23 +84,21 @@ module.exports = function(options) {
 /**
  * An operation has been emitted.
  */
-Pace.prototype.op = function op(count) {
-  if (count) {
-    if (this.current == 0) this.start = count;
-    this.current = count;
-  }
-  else {
-    this.current++;
+Pace.prototype.op = function op(signal) {
+
+  if (signal && !signal.errors) {
+    if (this.current == 0) this.start = signal;
+    this.current = signal;
+  } else this.current++;
+
+  if (signal && signal.errors) {
+    this.errors += signal.errors ? signal.errors : 1;
   }
 
-  if (this.burdenReached()) {
-    return;
-  }
+  if (this.burdenReached()) return;
 
   // Record the start time of the whole task.
-  if (!this.started) {
-    this.started = new Date().getTime();
-  }
+  if (!this.started) this.started = new Date().getTime();
 
   // Record start time.
   this.time_start = new Date().getTime();
@@ -108,14 +108,13 @@ Pace.prototype.op = function op(count) {
   this.outputProgress();
   this.outputStats();
   this.outputTimes();
+  this.outputErrors();
 
   // The task is complete.
-  if (this.current >= this.total) {
-    this.finished();
-  }
+  if (this.current >= this.total) this.finished();
 
   // Record end time.
-  this.time_end = new Date().getTime();
+  this.time_end   = new Date().getTime();
   this.inner_time = this.time_end - this.time_start;
 };
 
@@ -208,13 +207,18 @@ Pace.prototype.outputTimes = function outputTimes() {
   }
 };
 
+Pace.prototype.outputErrors = function outputErrors() {
+  this.charm.write('     ').display('bright').foreground('red').write('Errors: ' + this.errors).write('   ').display('reset');
+}
+
 /**
  * The progress has finished.
  */
 Pace.prototype.finished = function finished() {
   this.charm.write("\n\n");
   if (!this.hideFinishMessage) {
-    this.charm.write(this.finishMessage);
+    this.charm.write('\n' + this.finishMessage + '\n');
+    if (this.errors && this.errorMessage) this.charm.foreground('red').write('\n' + this.errorMessage + '\n');
     this.charm.write("\n\n");
   }
 };

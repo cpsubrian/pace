@@ -34,7 +34,7 @@ while (count++ < total) {
 
 Will cause output to your console similar to:
 
-![Sample progress bar output](https://github.com/cpsubrian/pace/raw/master/screenshot.png)
+![Sample progress bar output](https://github.com/ahmadassaf/pace/raw/master/screenshot.png)
 
 Usage
 -----
@@ -62,6 +62,7 @@ Supported Options:
   * `showBurden` - Mostly for debugging.  Show the current burden / skipped steps with the other metrics.
   * `hideFinishMessage` - Hides the message displayed when the progress bar finishes. Default: `False`
   * `finishMessage` - Pass a custom message to display when the progress bar finishes. Default: `Finished!`
+  * `errorMessage` - Pass a custom message to display when a signal error has been passed.
 
 ### pace.op([count]) ###
 Signal to pace that an operation was completed in your script by calling
@@ -70,6 +71,12 @@ Signal to pace that an operation was completed in your script by calling
 If you would rather track the progress in your own logic, you can call
 `pace.op(<count>)` where `<count>` is the current operation interation
 (for example step # 50 of a 100 step process).
+
+### pace.op({errors: count}) ###
+Signal to pace that an error has happened. This will automatically signal a normal `count` increase but will also increase the error counter shown under the progress bar.
+**Note:** The errors count can be passed to be more than one, however each error signal triggers one `op()` count.
+
+![Screenshot with Error Feature](https://github.com/ahmadassaf/pace/raw/master/screenshot_error_feature.png)
 
 ### pace.total ###
 If your script has a dynamic amount of work to do (for example, depending on the
