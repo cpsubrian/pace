@@ -9,7 +9,7 @@
   "homepage": "http://ahmadassaf.com",
   "repository": {
     "type": "git",
-    "url": "git://github.com/ahmadassaf/Awesome-Porgress.git"
+    "url": "git://github.com/ahmadassaf/Awesome-Progress.git"
   },
   "main": "pace.js",
   "scripts": {},
