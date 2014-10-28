@@ -5,7 +5,7 @@
   },
   "name": "awesome-progress",
   "description": "Command-line progress bar and progress metrics.  Helps you measure the 'pace' and erros during long-running scripts.Forked from https://github.com/cpsubrian/pace",
-  "version": "0.0.52",
+  "version": "0.0.53",
   "homepage": "http://ahmadassaf.com",
   "repository": {
     "type": "git",
