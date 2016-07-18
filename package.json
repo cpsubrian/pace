@@ -4,6 +4,7 @@
   "description": "Command-line progress bar and progress metrics.  Helps you measure the 'pace' of a long-running script.",
   "version": "0.0.4",
   "homepage": "http://cantina.github.com",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git://github.com/cpsubrian/pace.git"
