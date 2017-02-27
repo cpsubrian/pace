@@ -4,7 +4,7 @@ A node.js module that outputs a progress bar and other metrics to the command-li
 
 We've used it to optimize scripts that would have taken hours to complete down to minutes, without having to wait the hours before knowing that the script could use some optimization.
 
-![Screenshot with Error Feature](https://github.com/ahmadassaf/Awesome-Progress/tree/master/assets/img/screenshot.gif)
+![Screenshot with Error Feature](https://github.com/ahmadassaf/Awesome-Progress/blob/master/assets/img/screenshot.gif)
 
 > **Note**: This module is not longer maintained but you are welcome to PR or fork. You might want to check:
 > - [ascii-progress - Ascii progress-bar(s) in the terminal](https://github.com/bubkoo/ascii-progress)
