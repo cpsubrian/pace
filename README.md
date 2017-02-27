@@ -1,4 +1,4 @@
-# Pace
+# awesome-progress
 
 A node.js module that outputs a progress bar and other metrics to the command-line. It was originally conceived to help measure the 'pace' of long running scripts.
 
