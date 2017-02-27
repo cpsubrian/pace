@@ -1,20 +1,20 @@
 {
   "author": {
-    "name" : "Ahmad Assaf",
-    "email":  "ahmad.a.assaf@gmail.com"
+    "name": "Ahmad Assaf",
+    "email": "ahmad.a.assaf@gmail.com"
   },
   "name": "awesome-progress",
-  "description": "Command-line progress bar and progress metrics.  Helps you measure the 'pace' and erros during long-running scripts.Forked from https://github.com/cpsubrian/pace",
-  "version": "0.0.53",
+  "description": "Command-line progress bar and progress metrics.  Helps you measure the 'pace' and erros during long-running scripts. Forked from https://github.com/cpsubrian/pace",
+  "version": "0.0.6",
   "homepage": "http://ahmadassaf.com",
   "repository": {
     "type": "git",
     "url": "git://github.com/ahmadassaf/Awesome-Progress.git"
   },
-  "main": "pace.js",
+  "main": "index.js",
   "scripts": {},
   "dependencies": {
-    "charm": "1.0.0"
+    "charm": "^1.0.2"
   },
   "devDependencies": {},
   "optionalDependencies": {},
